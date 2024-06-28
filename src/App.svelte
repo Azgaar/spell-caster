@@ -1,12 +1,14 @@
 <script lang="ts">
   import {onMount} from "svelte";
+  import PrimaryButton from "./components/PrimaryButton.svelte";
+  import Spellbook from "./components/Spellbook.svelte";
   import {FADE_SPEED, HUE, MIN_POINTS, PI2} from "./lib/config";
   import DollarRecognizer from "./lib/dollar";
   import {createEffect, type Particle} from "./lib/effects";
   import spells, {type SpellConfig} from "./lib/spells";
   import strokes from "./lib/strokes";
 
-  let container: HTMLDivElement;
+  let container: HTMLElement;
   let mainCanvas: HTMLCanvasElement;
   let particleCanvas: HTMLCanvasElement;
   let effectCanvas: HTMLCanvasElement;
@@ -17,7 +19,7 @@
 
   type Point = {x: number; y: number};
 
-  let infoText = "Draw a magical symbol to cast a spell!";
+  let comment = "Draw a magical symbol to cast a spell!";
   let isDrawing = false;
   let lastX = 0;
   let lastY = 0;
@@ -106,7 +108,7 @@
     effectCtx?.clearRect(0, 0, effectCanvas.width, effectCanvas.height);
     drawnPoints = [];
     particles = [];
-    infoText = "Draw a magical symbol to cast a spell!";
+    comment = "Draw a magical symbol to cast a spell!";
   }
 
   function castSpell(drawnPoints: Point[]) {
@@ -117,11 +119,11 @@
     const spell = spells.find(spell => spell.stroke === unistroke.Name && unistroke.Score >= spell.minScore);
 
     if (!spell) {
-      infoText = "You failed to cast a spell!";
+      comment = "You failed to cast a spell!";
       return;
     }
 
-    infoText = evaluateResult(spell, unistroke.Score);
+    comment = evaluateResult(spell, unistroke.Score);
     createEffect(spell.effect, effectCanvas, particles);
   }
 
@@ -168,12 +170,17 @@
       if (particle.life <= 0 || particle.size < 0.1) particles.splice(index, 1);
     });
   }
+
+  function openSpellbook() {
+    const dialog = document.querySelector("dialog");
+    dialog?.showModal();
+  }
 </script>
 
 <svelte:window on:resize={resizeCanvases} />
 
-<main id="game-container">
-  <div id="canvas-container" bind:this={container}>
+<div id="game-container">
+  <main id="canvas-container" bind:this={container}>
     <canvas
       id="main-canvas"
       on:mousedown={startDrawing}
@@ -184,40 +191,47 @@
     />
     <canvas id="particle-canvas" bind:this={particleCanvas} />
     <canvas id="effect-canvas" bind:this={effectCanvas} />
-  </div>
+  </main>
 
-  <div id="ui-container">
-    <div id="info">{infoText}</div>
-    <div id="controls">
-      <button id="clear-button" on:click={clearCanvas}>Clear Canvas</button>
-      <button id="open-spellbook-button">Open Spellbook</button>
+  <aside id="ui-container">
+    <img
+      id="portrait"
+      src="https://replicate.delivery/yhqm/X4tD6JsPBOIfcSvmmpafuGeSNEEGA9JUOTkgVFjseR00wmMMB/out-0.png"
+      alt="mage"
+    />
+    <div id="comment">{comment}</div>
+    <div id="control-buttons">
+      <PrimaryButton onClick={clearCanvas}>Clear Canvas</PrimaryButton>
+      <PrimaryButton onClick={openSpellbook}>Open Spellbook</PrimaryButton>
     </div>
+    <blockquote id="quote">
+      Happiness can be found, even in the darkest of times, if one only remembers to turn on the light.
+    </blockquote>
+  </aside>
+
+  <div class="dialog">
+    <Spellbook />
   </div>
-</main>
+</div>
 
 <style>
   #game-container {
     width: 100%;
     height: 100%;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
   }
 
   #canvas-container {
-    width: 100%;
-    height: 100%;
+    flex: 1;
+    position: relative;
+    background-color: var(--background-color);
   }
 
   #main-canvas,
   #particle-canvas,
   #effect-canvas {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     cursor:
       url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path d="M8 8L24 24M8 24L24 8" stroke="%23f0f0ff" stroke-width="2"/></svg>')
         16 16,
@@ -235,24 +249,49 @@
   }
 
   #ui-container {
-    pointer-events: none;
-    user-select: none;
-    position: absolute;
-    bottom: 2vh;
+    padding: var(--gap2);
+
+    flex: 0 0 var(--aside-width);
+    background: var(--surface-color);
+    border-left: 2px solid var(--primary-color);
+
     display: flex;
     flex-direction: column;
-    align-items: center;
+    gap: var(--gap2);
+
+    overflow-y: auto;
+    user-select: none;
   }
 
-  #info {
-    font-size: 2em;
+  #portrait {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    border-radius: 50%;
+    border: 3px solid var(--primary-color);
+  }
+
+  #comment {
+    font-size: larger;
     text-align: center;
-    text-shadow: 0 0 10px var(--primary-color);
+    min-height: 4rem;
+    text-shadow:
+      0 0 5px var(--primary-color),
+      0 0 10px var(--primary-color),
+      0 0 20px var(--primary-color);
   }
 
-  #controls {
-    margin-top: 2vh;
+  #control-buttons {
     display: flex;
-    gap: 1vw;
+    flex-direction: column;
+    gap: var(--gap);
+  }
+
+  #quote {
+    margin: 0;
+    padding: 1rem;
+    background: rgba(75, 0, 130, 0.3);
+    border-radius: 5px;
+    font-style: italic;
   }
 </style>

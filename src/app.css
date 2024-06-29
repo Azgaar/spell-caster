@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --primary-color: #4b0082;
   --primary-accent-color: #8a2be2;
@@ -6,9 +10,6 @@
   --font-color: #f0f0ff;
 
   --aside-width: 300px;
-  --gap: 10px;
-  --gap2: 20px;
-
   --font-family: "Luminari", fantasy;
 }
 
@@ -28,9 +29,4 @@ html {
 
 button {
   cursor: pointer;
-}
-
-#app {
-  width: 100vw;
-  height: 100vh;
 }

@@ -5,16 +5,9 @@
 
 <div
   aria-label="page container"
+  class="flex w-full h-full"
   in:fade={{duration: timeout, delay: timeout}}
   out:fade={{duration: timeout, delay: timeout}}
 >
   <slot />
 </div>
-
-<style>
-  div {
-    width: 100%;
-    height: 100%;
-    display: flex;
-  }
-</style>

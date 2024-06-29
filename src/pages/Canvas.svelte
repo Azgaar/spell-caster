@@ -21,6 +21,8 @@
   type Point = {x: number; y: number};
 
   let comment = "Draw a magical symbol to cast a spell!";
+  const quote = "Happiness can be found, even in the darkest of times, if one only remembers to turn on the light.";
+
   let isDrawing = false;
   let lastX = 0;
   let lastY = 0;
@@ -176,7 +178,7 @@
 <svelte:window on:resize={resizeCanvases} />
 
 <PageContainer>
-  <main id="canvas-container" bind:this={container}>
+  <main id="canvas-container" bind:this={container} class="relative flex-1 cursor-cross">
     <canvas
       id="main-canvas"
       on:mousedown={startDrawing}
@@ -184,96 +186,28 @@
       on:mouseup={stopDrawing}
       on:mouseleave={stopDrawing}
       bind:this={mainCanvas}
+      class="absolute inset-0"
     />
-    <canvas id="particle-canvas" bind:this={particleCanvas} />
-    <canvas id="effect-canvas" bind:this={effectCanvas} />
+    <canvas id="particle-canvas" bind:this={particleCanvas} class="absolute inset-0 pointer-events-none" />
+    <canvas id="effect-canvas" bind:this={effectCanvas} class="absolute inset-0 pointer-events-none" />
   </main>
 
-  <aside id="ui-container">
-    <img id="portrait" src="mage.webp" alt="mage" />
-    <div id="comment">{comment}</div>
-    <div id="control-buttons">
-      <PrimaryButton onClick={clearCanvas}>Clear Canvas</PrimaryButton>
-      <PrimaryButton onClick={() => page.set("spellbook")}>Open Spellbook</PrimaryButton>
+  <aside
+    class="p-5 flex flex-col gap-4 flex-[0_0_var(--aside-width)] overflow-y-auto select-none bg-surface border-l-2 border-primary"
+  >
+    <img
+      id="portrait"
+      src="mage.webp"
+      alt="mage"
+      class="shadow-primary rounded-full w-48 h-48 mx-auto border-[3px] border-primary"
+    />
+    <div id="comment" class="text-xl min-h-16 text-center text-shadow">{comment}</div>
+    <div id="control-buttons" class="flex flex-col gap-2">
+      <PrimaryButton onClick={clearCanvas}>Clear all</PrimaryButton>
+      <PrimaryButton onClick={() => page.set("spellbook")}>Spellbook</PrimaryButton>
     </div>
-    <blockquote id="quote">
-      Happiness can be found, even in the darkest of times, if one only remembers to turn on the light.
+    <blockquote class="m-0 p-4 rounded italic bg-primary/30">
+      {quote}
     </blockquote>
   </aside>
 </PageContainer>
-
-<style>
-  #canvas-container {
-    flex: 1;
-    position: relative;
-  }
-
-  #main-canvas,
-  #particle-canvas,
-  #effect-canvas {
-    position: absolute;
-    inset: 0;
-    cursor:
-      url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path d="M8 8L24 24M8 24L24 8" stroke="%23f0f0ff" stroke-width="2"/></svg>')
-        16 16,
-      auto;
-  }
-
-  #particle-canvas {
-    z-index: 2;
-    pointer-events: none;
-  }
-
-  #effect-canvas {
-    z-index: 3;
-    pointer-events: none;
-  }
-
-  #ui-container {
-    padding: var(--gap2);
-
-    flex: 0 0 var(--aside-width);
-    background: var(--surface-color);
-    border-left: 2px solid var(--primary-color);
-
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap2);
-
-    overflow-y: auto;
-    user-select: none;
-  }
-
-  #portrait {
-    width: 200px;
-    height: 200px;
-    margin: 0 auto;
-    border-radius: 50%;
-    border: 3px solid var(--primary-color);
-    box-shadow: 0 0 var(--gap2) var(--primary-accent-color);
-  }
-
-  #comment {
-    font-size: larger;
-    text-align: center;
-    min-height: 4rem;
-    text-shadow:
-      0 0 5px var(--primary-color),
-      0 0 10px var(--primary-color),
-      0 0 20px var(--primary-color);
-  }
-
-  #control-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap);
-  }
-
-  #quote {
-    margin: 0;
-    padding: 1rem;
-    background: rgba(75, 0, 130, 0.3);
-    border-radius: 5px;
-    font-style: italic;
-  }
-</style>

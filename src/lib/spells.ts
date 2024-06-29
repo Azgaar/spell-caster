@@ -1,3 +1,4 @@
+import type {Effect} from "./effects";
 import type {Stroke} from "./strokes";
 
 type Spell =
@@ -15,7 +16,7 @@ type Spell =
   | "Shadow Step"
   | "Pillar of Flame";
 
-export type SpellConfig = {name: Spell; stroke: Stroke; effect: string; minScore: number; description: string};
+export type SpellConfig = {name: Spell; stroke: Stroke; effect: Effect; minScore: number; description: string};
 
 const spells: SpellConfig[] = [
   {

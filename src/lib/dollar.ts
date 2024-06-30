@@ -67,34 +67,58 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **/
 
-function Point(x, y) {
-  // constructor
-  this.x = x;
-  this.y = y;
+import type {Stroke} from "./strokes";
+
+class Point {
+  x: number;
+  y: number;
+
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
 }
 
-function Rectangle(x, y, width, height) {
-  // constructor
-  this.x = x;
-  this.y = y;
-  this.Width = width;
-  this.Height = height;
+class Rectangle {
+  x: number;
+  y: number;
+  Width: number;
+  Height: number;
+
+  constructor(x: number, y: number, width: number, height: number) {
+    this.x = x;
+    this.y = y;
+    this.Width = width;
+    this.Height = height;
+  }
 }
 
-function Unistroke(name, points) {
-  this.Name = name;
-  this.Points = Resample(points, NumPoints);
-  var radians = IndicativeAngle(this.Points);
-  this.Points = RotateBy(this.Points, -radians);
-  this.Points = ScaleTo(this.Points, SquareSize);
-  this.Points = TranslateTo(this.Points, Origin);
-  this.Vector = Vectorize(this.Points); // for Protractor
+class Unistroke {
+  Name: string;
+  Points: Point[];
+  Vector: number[];
+
+  constructor(name: string, points: Point[]) {
+    this.Name = name;
+    this.Points = Resample(points, NumPoints);
+    var radians = IndicativeAngle(this.Points);
+    this.Points = RotateBy(this.Points, -radians);
+    this.Points = ScaleTo(this.Points, SquareSize);
+    this.Points = TranslateTo(this.Points, Origin);
+    this.Vector = Vectorize(this.Points); // for Protractor
+  }
 }
 
-function Result(name, score, ms) {
-  this.Name = name;
-  this.Score = score;
-  this.Time = ms;
+class Result {
+  Name: string | null;
+  Score: number;
+  Time: number;
+
+  constructor(name: string | null, score: number, ms: number) {
+    this.Name = name;
+    this.Score = score;
+    this.Time = ms;
+  }
 }
 
 const NumPoints = 64;
@@ -106,54 +130,59 @@ const AngleRange = Deg2Rad(45.0);
 const AnglePrecision = Deg2Rad(2.0);
 const Phi = 0.5 * (-1.0 + Math.sqrt(5.0)); // Golden Ratio
 
-export default function DollarRecognizer(strokes) {
-  const Unistrokes = Object.entries(strokes).map(
-    ([name, points]) =>
-      new Unistroke(
-        name,
-        points.map(([x, y]) => new Point(x, y))
-      )
-  );
+export default class DollarRecognizer {
+  Recognize: (points: Point[], useProtractor: boolean) => Result;
+  AddGesture: (name: string, points: Point[]) => number;
 
-  this.Recognize = function (points, useProtractor) {
-    var t0 = Date.now();
-    var candidate = new Unistroke("", points);
+  constructor(strokes: Record<Stroke, Array<[number, number]>>) {
+    const Unistrokes = Object.entries(strokes).map(
+      ([name, points]) =>
+        new Unistroke(
+          name,
+          points.map(([x, y]) => new Point(x, y))
+        )
+    );
 
-    var u = -1;
-    var b = +Infinity;
-    for (
-      var i = 0;
-      i < Unistrokes.length;
-      i++ // for each unistroke template
-    ) {
-      var d;
-      if (useProtractor) d = OptimalCosineDistance(Unistrokes[i].Vector, candidate.Vector); // Protractor
-      else d = DistanceAtBestAngle(candidate.Points, Unistrokes[i], -AngleRange, +AngleRange, AnglePrecision); // Golden Section Search (original $1)
-      if (d < b) {
-        b = d; // best (least) distance
-        u = i; // unistroke index
+    this.Recognize = function (points: Point[], useProtractor: boolean) {
+      var t0 = Date.now();
+      var candidate = new Unistroke("", points);
+
+      var u = -1;
+      var b = +Infinity;
+      for (
+        var i = 0;
+        i < Unistrokes.length;
+        i++ // for each unistroke template
+      ) {
+        var d;
+        if (useProtractor) d = OptimalCosineDistance(Unistrokes[i].Vector, candidate.Vector); // Protractor
+        else d = DistanceAtBestAngle(candidate.Points, Unistrokes[i], -AngleRange, +AngleRange, AnglePrecision); // Golden Section Search (original $1)
+        if (d < b) {
+          b = d; // best (least) distance
+          u = i; // unistroke index
+        }
       }
-    }
-    var t1 = Date.now();
-    return u == -1
-      ? new Result(null, 0.0, t1 - t0)
-      : new Result(Unistrokes[u].Name, useProtractor ? 1.0 - b : 1.0 - b / HalfDiagonal, t1 - t0);
-  };
+      var t1 = Date.now();
+      return u == -1
+        ? new Result(null, 0.0, t1 - t0)
+        : new Result(Unistrokes[u].Name, useProtractor ? 1.0 - b : 1.0 - b / HalfDiagonal, t1 - t0);
+    };
 
-  this.AddGesture = function (name, points) {
-    Unistrokes[Unistrokes.length] = new Unistroke(name, points); // append new unistroke
-    var num = 0;
-    for (var i = 0; i < Unistrokes.length; i++) {
-      if (Unistrokes[i].Name == name) num++;
-    }
-    return num;
-  };
+    this.AddGesture = function (name: string, points: Point[]) {
+      Unistrokes[Unistrokes.length] = new Unistroke(name, points); // append new unistroke
+      var num = 0;
+      for (var i = 0; i < Unistrokes.length; i++) {
+        if (Unistrokes[i].Name == name) num++;
+      }
+      return num;
+    };
+  }
 }
 
 //
 // Private helper functions from here on down
 //
-function Resample(points, n) {
+function Resample(points: Point[], n: number) {
   var I = PathLength(points) / (n - 1); // interval length
   var D = 0.0;
   var newpoints = new Array(points[0]);
@@ -174,12 +203,12 @@ function Resample(points, n) {
   return newpoints;
 }
 
-function IndicativeAngle(points) {
+function IndicativeAngle(points: Point[]) {
   var c = Centroid(points);
   return Math.atan2(c.y - points[0].y, c.x - points[0].x);
 }
 
-function RotateBy(points, radians) {
+function RotateBy(points: Point[], radians: number) {
   // rotates points around centroid
   var c = Centroid(points);
   var cos = Math.cos(radians);
@@ -193,7 +222,7 @@ function RotateBy(points, radians) {
   return newpoints;
 }
 
-function ScaleTo(points, size) {
+function ScaleTo(points: Point[], size: number) {
   // non-uniform scale; assumes 2D gestures (i.e., no lines)
   var B = BoundingBox(points);
   var newpoints = [];
@@ -205,7 +234,7 @@ function ScaleTo(points, size) {
   return newpoints;
 }
 
-function TranslateTo(points, pt) {
+function TranslateTo(points: Point[], pt: Point) {
   // translates points' centroid
   var c = Centroid(points);
   var newpoints = [];
@@ -217,7 +246,7 @@ function TranslateTo(points, pt) {
   return newpoints;
 }
 
-function Vectorize(points) {
+function Vectorize(points: Point[]) {
   // for Protractor
   var sum = 0.0;
   var vector = [];
@@ -231,7 +260,7 @@ function Vectorize(points) {
   return vector;
 }
 
-function OptimalCosineDistance(v1, v2) {
+function OptimalCosineDistance(v1: number[], v2: number[]) {
   // for Protractor
   var a = 0.0;
   var b = 0.0;
@@ -243,7 +272,7 @@ function OptimalCosineDistance(v1, v2) {
   return Math.acos(a * Math.cos(angle) + b * Math.sin(angle));
 }
 
-function DistanceAtBestAngle(points, T, a, b, threshold) {
+function DistanceAtBestAngle(points: Point[], T: Unistroke, a: number, b: number, threshold: number) {
   var x1 = Phi * a + (1.0 - Phi) * b;
   var f1 = DistanceAtAngle(points, T, x1);
   var x2 = (1.0 - Phi) * a + Phi * b;
@@ -266,12 +295,12 @@ function DistanceAtBestAngle(points, T, a, b, threshold) {
   return Math.min(f1, f2);
 }
 
-function DistanceAtAngle(points, T, radians) {
+function DistanceAtAngle(points: Point[], T: Unistroke, radians: number) {
   var newpoints = RotateBy(points, radians);
   return PathDistance(newpoints, T.Points);
 }
 
-function Centroid(points) {
+function Centroid(points: Point[]) {
   let x = 0.0;
   let y = 0.0;
 
@@ -286,7 +315,7 @@ function Centroid(points) {
   return new Point(x, y);
 }
 
-function BoundingBox(points) {
+function BoundingBox(points: Point[]) {
   var minX = +Infinity,
     maxX = -Infinity,
     minY = +Infinity,
@@ -300,7 +329,7 @@ function BoundingBox(points) {
   return new Rectangle(minX, minY, maxX - minX, maxY - minY);
 }
 
-function PathDistance(pts1, pts2) {
+function PathDistance(pts1: Point[], pts2: Point[]) {
   var d = 0.0;
   for (
     var i = 0;
@@ -311,18 +340,18 @@ function PathDistance(pts1, pts2) {
   return d / pts1.length;
 }
 
-function PathLength(points) {
+function PathLength(points: Point[]) {
   var d = 0.0;
   for (var i = 1; i < points.length; i++) d += Distance(points[i - 1], points[i]);
   return d;
 }
 
-function Distance(p1, p2) {
+function Distance(p1: Point, p2: Point) {
   var dx = p2.x - p1.x;
   var dy = p2.y - p1.y;
   return Math.sqrt(dx * dx + dy * dy);
 }
 
-function Deg2Rad(d) {
+function Deg2Rad(d: number) {
   return (d * Math.PI) / 180.0;
 }

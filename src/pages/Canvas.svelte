@@ -64,7 +64,7 @@
     createMagicalParticle({x: lastX, y: lastY, size: 3, speedX: 4, speedY: 4, life: 30});
   }
 
-  function draw(e: MouseEvent) {
+  function draw(e: MouseEvent | TouchEvent) {
     if (!mainCtx) return;
     if (!isDrawing) return;
 

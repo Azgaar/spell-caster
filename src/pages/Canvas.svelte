@@ -125,7 +125,7 @@
   function castSpell(drawnPoints: Point[]) {
     if (drawnPoints.length < MIN_POINTS) return;
 
-    const unistroke = Recognize(drawnPoints, true);
+    const unistroke = Recognize(drawnPoints, false);
     console.info(unistroke);
     const spell = spells.find(spell => spell.stroke === unistroke.Name && unistroke.Score >= spell.minScore);
 

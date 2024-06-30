@@ -63,7 +63,7 @@ const spells: SpellConfig[] = [
   },
   {
     name: "Nova Blast",
-    stroke: "hourglass",
+    stroke: "pentagon",
     minScore: 0.2,
     effect: "novaBlast",
     description: "A blast of energy that damages all enemies."
@@ -91,14 +91,14 @@ const spells: SpellConfig[] = [
   },
   {
     name: "Chronoshift",
-    stroke: "left curly brace",
+    stroke: "hourglass",
     minScore: 0.2,
     effect: "wind",
     description: "A shift in time that slows the target."
   },
   {
     name: "Shadow Step",
-    stroke: "right curly brace",
+    stroke: "ankh",
     minScore: 0.2,
     effect: "shadowStep",
     description: "A step into the shadows that teleports the caster."

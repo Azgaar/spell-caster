@@ -24,9 +24,9 @@ export type Particle = {
   life: number;
 };
 
-type EffectContext = {width: number; height: number; ctx: CanvasRenderingContext2D; particles: Particle[]};
+export type EffectContext = {width: number; height: number; ctx: CanvasRenderingContext2D; particles: Particle[]};
 
-const effectsMap: Record<Effect, (context: EffectContext) => void> = {
+export const effectsMap: Record<Effect, (context: EffectContext) => void> = {
   fireball: createFireballEffect,
   lightning: createLightningEffect,
   shadowStep: createShadowStepEffect,

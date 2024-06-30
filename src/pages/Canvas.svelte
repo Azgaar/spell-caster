@@ -78,7 +78,7 @@
   }
 
   function animateStroke() {
-    if (!mainCtx) return;
+    if (!mainCanvas || !mainCtx) return;
     if (isDrawing) return;
 
     const imageData = mainCtx.getImageData(0, 0, mainCanvas.width, mainCanvas.height);
@@ -156,7 +156,7 @@
   }
 
   function animateParticles() {
-    if (!particleCtx) return;
+    if (!particleCanvas || !particleCtx) return;
 
     particleCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
     particles.forEach((particle, index) => {
@@ -206,6 +206,7 @@
       <PrimaryButton onClick={clearCanvas}>Clear all</PrimaryButton>
       <PrimaryButton onClick={() => page.set("spellbook")}>Spellbook</PrimaryButton>
       <PrimaryButton onClick={() => page.set("strokes")}>Strokes</PrimaryButton>
+      <PrimaryButton onClick={() => page.set("effects")}>Effects</PrimaryButton>
     </div>
     <blockquote class="m-0 p-4 rounded italic bg-primary/30">
       {quote}

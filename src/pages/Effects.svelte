@@ -2,6 +2,7 @@
   import {onMount} from "svelte";
   import PageContainer from "~components/PageContainer.svelte";
   import PrimaryButton from "~components/PrimaryButton.svelte";
+  import PrimaryLinkButton from "~components/PrimaryLinkButton.svelte";
   import {PI2} from "~lib/config";
   import {createEffect, type Effect, effectsMap, type Particle} from "~lib/effects";
 

@@ -1,6 +1,7 @@
 <script lang="ts">
   import {draw} from "svelte/transition";
   import PageContainer from "~components/PageContainer.svelte";
+  import PrimaryLinkButton from "~components/PrimaryLinkButton.svelte";
   import {DRAW_TIME} from "~lib/config";
   import strokes from "~lib/strokes";
 

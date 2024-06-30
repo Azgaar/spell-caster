@@ -127,7 +127,9 @@
 
     const unistroke = Recognize(drawnPoints, false);
     console.info(unistroke);
-    const spell = spells.find(spell => spell.stroke === unistroke.Name && unistroke.Score >= spell.minScore);
+    const spell = Object.values(spells).find(
+      spell => spell.stroke === unistroke.Name && unistroke.Score >= spell.minScore
+    );
 
     if (!spell) {
       comment = "You failed to cast a spell!";
@@ -215,9 +217,9 @@
     <div id="comment" class="text-xl min-h-16 text-center text-shadow">{comment}</div>
     <div id="control-buttons" class="flex flex-col gap-2">
       <PrimaryButton onClick={clearCanvas}>Clear all</PrimaryButton>
-      <PrimaryLinkButton href="#/spellbook/0">Spellbook</PrimaryLinkButton>
-      <PrimaryLinkButton href="#/strokes/0">Strokes</PrimaryLinkButton>
-      <PrimaryLinkButton href="#/effects/0">Effects</PrimaryLinkButton>
+      <PrimaryLinkButton href="#/spellbook">Spellbook</PrimaryLinkButton>
+      <PrimaryLinkButton href="#/strokes">Strokes</PrimaryLinkButton>
+      <PrimaryLinkButton href="#/effects">Effects</PrimaryLinkButton>
     </div>
     <blockquote class="m-0 p-4 rounded italic bg-primary/30">
       {quote}

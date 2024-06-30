@@ -7,9 +7,10 @@
 
   const routes = {
     "/": Canvas,
-    "/spellbook/:spell": Spellbook,
-    "/strokes/:stroke": Strokes,
-    "/effects/:effect": Effects
+    "/spellbook/:id?": Spellbook,
+    "/strokes": Strokes,
+    "/effects": Effects,
+    "*": Canvas // 404
   };
 </script>
 

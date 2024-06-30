@@ -4,7 +4,6 @@
   import PrimaryButton from "~components/PrimaryButton.svelte";
   import {PI2} from "~lib/config";
   import {createEffect, type Effect, effectsMap, type Particle} from "~lib/effects";
-  import {page} from "~lib/store";
 
   let container: HTMLElement;
   let particleCanvas: HTMLCanvasElement;
@@ -82,7 +81,7 @@
 
       <div class="flex flex-col gap-2">
         <PrimaryButton onClick={clearCanvas}>Clear canvas</PrimaryButton>
-        <PrimaryButton onClick={() => page.set("canvas")}>Back to practice</PrimaryButton>
+        <PrimaryLinkButton href="#">Back to practice</PrimaryLinkButton>
       </div>
     </nav>
   </aside>

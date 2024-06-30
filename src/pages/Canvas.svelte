@@ -2,11 +2,11 @@
   import {onMount} from "svelte";
   import PageContainer from "~components/PageContainer.svelte";
   import PrimaryButton from "~components/PrimaryButton.svelte";
+  import PrimaryLinkButton from "~components/PrimaryLinkButton.svelte";
   import {FADE_SPEED, HUE, MIN_POINTS, PI2} from "~lib/config";
   import DollarRecognizer from "~lib/dollar";
   import {type Particle, createEffect} from "~lib/effects";
   import spells, {type SpellConfig} from "~lib/spells";
-  import {page} from "~lib/store";
   import strokes from "~lib/strokes";
 
   let container: HTMLElement;
@@ -215,9 +215,9 @@
     <div id="comment" class="text-xl min-h-16 text-center text-shadow">{comment}</div>
     <div id="control-buttons" class="flex flex-col gap-2">
       <PrimaryButton onClick={clearCanvas}>Clear all</PrimaryButton>
-      <PrimaryButton onClick={() => page.set("spellbook")}>Spellbook</PrimaryButton>
-      <PrimaryButton onClick={() => page.set("strokes")}>Strokes</PrimaryButton>
-      <PrimaryButton onClick={() => page.set("effects")}>Effects</PrimaryButton>
+      <PrimaryLinkButton href="#/spellbook/0">Spellbook</PrimaryLinkButton>
+      <PrimaryLinkButton href="#/strokes/0">Strokes</PrimaryLinkButton>
+      <PrimaryLinkButton href="#/effects/0">Effects</PrimaryLinkButton>
     </div>
     <blockquote class="m-0 p-4 rounded italic bg-primary/30">
       {quote}

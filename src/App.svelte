@@ -1,14 +1,16 @@
 <script lang="ts">
-  import {Route, Router} from "svelte-routing";
+  import Router from "svelte-spa-router";
   import Canvas from "~pages/Canvas.svelte";
   import Effects from "~pages/Effects.svelte";
   import Spellbook from "~pages/Spellbook.svelte";
   import Strokes from "~pages/Strokes.svelte";
+
+  const routes = {
+    "/": Canvas,
+    "/spellbook/:spell": Spellbook,
+    "/strokes/:stroke": Strokes,
+    "/effects/:effect": Effects
+  };
 </script>
 
-<Router>
-  <Route path="/" component={Canvas} />
-  <Route path="spellbook/:id" component={Spellbook} />
-  <Route path="strokes/:id" component={Strokes} />
-  <Route path="effects/:id" component={Effects} />
-</Router>
+<Router {routes} />

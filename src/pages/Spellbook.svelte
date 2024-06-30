@@ -2,9 +2,9 @@
   import {draw, fly} from "svelte/transition";
   import PageContainer from "~components/PageContainer.svelte";
   import PrimaryButton from "~components/PrimaryButton.svelte";
+  import PrimaryLinkButton from "~components/PrimaryLinkButton.svelte";
   import {DRAW_TIME} from "~lib/config";
   import spells from "~lib/spells";
-  import {page} from "~lib/store";
   import strokes from "~lib/strokes";
 
   let spellIndex = 0;
@@ -98,7 +98,7 @@
           >
         {/each}
       </div>
-      <PrimaryButton onClick={() => page.set("canvas")}>Back to practice</PrimaryButton>
+      <PrimaryLinkButton href="#">Back to practice</PrimaryLinkButton>
     </nav>
   </aside>
 </PageContainer>

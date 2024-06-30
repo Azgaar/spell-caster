@@ -13,7 +13,10 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
 
-      - name: Install and Build 🔧
+      - name: Install Bun 🍞
+        uses: oven-sh/setup-bun@v1
+
+      - name: Install deps and Build 🔧
         run: |
           bun install
           bun run build

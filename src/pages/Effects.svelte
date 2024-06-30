@@ -1,10 +1,10 @@
 <script lang="ts">
   import {onMount} from "svelte";
-  import PageContainer from "../components/PageContainer.svelte";
-  import PrimaryButton from "../components/PrimaryButton.svelte";
-  import {PI2} from "../lib/config";
-  import {createEffect, effectsMap, type Effect, type Particle} from "../lib/effects";
-  import {page} from "../lib/store";
+  import PageContainer from "~components/PageContainer.svelte";
+  import PrimaryButton from "~components/PrimaryButton.svelte";
+  import {PI2} from "~lib/config";
+  import {createEffect, type Effect, effectsMap, type Particle} from "~lib/effects";
+  import {page} from "~lib/store";
 
   let container: HTMLElement;
   let particleCanvas: HTMLCanvasElement;

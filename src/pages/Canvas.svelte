@@ -1,13 +1,13 @@
 <script lang="ts">
   import {onMount} from "svelte";
-  import PageContainer from "../components/PageContainer.svelte";
-  import PrimaryButton from "../components/PrimaryButton.svelte";
-  import {FADE_SPEED, HUE, MIN_POINTS, PI2} from "../lib/config";
-  import DollarRecognizer from "../lib/dollar";
-  import {createEffect, type Particle} from "../lib/effects";
-  import spells, {type SpellConfig} from "../lib/spells";
-  import {page} from "../lib/store";
-  import strokes from "../lib/strokes";
+  import PageContainer from "~components/PageContainer.svelte";
+  import PrimaryButton from "~components/PrimaryButton.svelte";
+  import {FADE_SPEED, HUE, MIN_POINTS, PI2} from "~lib/config";
+  import DollarRecognizer from "~lib/dollar";
+  import {type Particle, createEffect} from "~lib/effects";
+  import spells, {type SpellConfig} from "~lib/spells";
+  import {page} from "~lib/store";
+  import strokes from "~lib/strokes";
 
   let container: HTMLElement;
   let mainCanvas: HTMLCanvasElement;

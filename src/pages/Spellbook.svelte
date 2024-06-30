@@ -1,11 +1,11 @@
 <script lang="ts">
   import {draw, fly} from "svelte/transition";
-  import PageContainer from "../components/PageContainer.svelte";
-  import PrimaryButton from "../components/PrimaryButton.svelte";
-  import {DRAW_TIME} from "../lib/config";
-  import spells from "../lib/spells";
-  import {page} from "../lib/store";
-  import strokes from "../lib/strokes";
+  import PageContainer from "~components/PageContainer.svelte";
+  import PrimaryButton from "~components/PrimaryButton.svelte";
+  import {DRAW_TIME} from "~lib/config";
+  import spells from "~lib/spells";
+  import {page} from "~lib/store";
+  import strokes from "~lib/strokes";
 
   let spellIndex = 0;
   let currentSpell = spells[spellIndex];

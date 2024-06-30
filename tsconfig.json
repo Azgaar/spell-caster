@@ -11,28 +11,14 @@
     "moduleDetection": "force",
     "baseUrl": "",
     "paths": {
-      "~assets/*": [
-        "src/assets/*"
-      ],
-      "~components/*": [
-        "src/components/*"
-      ],
-      "~lib/*": [
-        "src/lib/*"
-      ],
-      "~pages/*": [
-        "src/pages/*"
-      ],
-      "~/*": [
-        "src/*"
-      ]
+      "~assets/*": ["src/assets/*"],
+      "~components/*": ["src/components/*"],
+      "~lib/*": ["src/lib/*"],
+      "~pages/*": ["src/pages/*"],
+      "~/*": ["src/*"]
     }
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.js",
-    "src/**/*.svelte"
-  ],
+  "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte"],
   "references": [
     {
       "path": "./tsconfig.node.json"

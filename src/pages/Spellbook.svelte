@@ -1,9 +1,11 @@
 <script lang="ts">
-  import {fly} from "svelte/transition";
+  import {draw, fly} from "svelte/transition";
   import PageContainer from "../components/PageContainer.svelte";
   import PrimaryButton from "../components/PrimaryButton.svelte";
+  import {DRAW_TIME} from "../lib/config";
   import spells from "../lib/spells";
   import {page} from "../lib/store";
+  import strokes from "../lib/strokes";
 
   let spellIndex = 0;
   let currentSpell = spells[spellIndex];
@@ -36,14 +38,27 @@
         </div>
 
         <div id="right-page" class="flex flex-col justify-between flex-1 gap-8 px-6 text-dark text-lg">
-          <div class="flex flex-col gap-8">
+          <div class="[&>*:not(:last-child)]:mb-8">
+            <button on:click={() => (currentSpell = currentSpell)} class="ml-4 p-0 float-right rounded-lg bg-primary/5">
+              <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                {#key currentSpell}
+                  <polyline
+                    points={strokes[currentSpell.stroke].join(" ")}
+                    fill="none"
+                    stroke="var(--primary-color)"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    in:draw={{duration: DRAW_TIME}}
+                  />
+                {/key}
+              </svg>
+            </button>
             <p>
               {currentSpell.name} is often considered the cornerstone of chronomancy. Its ability to halt the flow of time
-              for a single target makes it invaluable in both combat and non-combat situations.
-            </p>
-            <p>
-              When casting {currentSpell.name}, visualize time as a river flowing around your target. Your goal is to
-              create a perfectly still eddy in that river, isolating your target from the timestream.
+              for a single target makes it invaluable in both combat and non-combat situations. When casting {currentSpell.name},
+              visualize time as a river flowing around your target. Your goal is to create a perfectly still eddy in
+              that river, isolating your target from the timestream.
             </p>
             <p>Common applications of {currentSpell.name} include:</p>
             <ul>
@@ -53,9 +68,8 @@
               <li>Creating "living statues" for artistic or strategic purposes</li>
             </ul>
             <p>
-              <strong class="text-surface">Warning:</strong> Overuse of {currentSpell.name} on living beings can have unforeseen
-              consequences. Always release the spell carefully, allowing the target to gradually reintegrate with the normal
-              flow of time.
+              Warning: overuse of {currentSpell.name} on living beings can have unforeseen consequences. Always release the
+              spell carefully, allowing the target to gradually reintegrate with the normal flow of time.
             </p>
           </div>
           <div id="page-number" class="text-right text-lg pb-4">- {spellIndex + 1} -</div>
@@ -78,7 +92,7 @@
           <PrimaryButton
             onClick={() => {
               spellIndex = index;
-              currentSpell = spell;
+              currentSpell = spells[index];
             }}
             current={index === spellIndex}>{spell.name}</PrimaryButton
           >

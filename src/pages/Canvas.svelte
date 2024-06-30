@@ -205,6 +205,7 @@
     <div id="control-buttons" class="flex flex-col gap-2">
       <PrimaryButton onClick={clearCanvas}>Clear all</PrimaryButton>
       <PrimaryButton onClick={() => page.set("spellbook")}>Spellbook</PrimaryButton>
+      <PrimaryButton onClick={() => page.set("strokes")}>Strokes</PrimaryButton>
     </div>
     <blockquote class="m-0 p-4 rounded italic bg-primary/30">
       {quote}

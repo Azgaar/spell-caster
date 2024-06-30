@@ -28,7 +28,7 @@ const spells: SpellConfig[] = [
   },
   {
     name: "Dessintegrate",
-    stroke: "triangle",
+    stroke: "x",
     minScore: 0.2,
     effect: "wildMagic",
     description: "A beam of energy that disintegrates anything in its path."
@@ -49,7 +49,7 @@ const spells: SpellConfig[] = [
   },
   {
     name: "Frost Wave",
-    stroke: "x",
+    stroke: "triangle",
     minScore: 0.2,
     effect: "frostWave",
     description: "A wave of frost that freezes the target."
@@ -63,7 +63,7 @@ const spells: SpellConfig[] = [
   },
   {
     name: "Nova Blast",
-    stroke: "delete",
+    stroke: "hourglass",
     minScore: 0.2,
     effect: "novaBlast",
     description: "A blast of energy that damages all enemies."
@@ -84,7 +84,7 @@ const spells: SpellConfig[] = [
   },
   {
     name: "Summon Demon",
-    stroke: "star",
+    stroke: "pentagram",
     minScore: 0.2,
     effect: "star",
     description: "A demon that fights for the caster."

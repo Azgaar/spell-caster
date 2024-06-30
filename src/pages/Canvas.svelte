@@ -49,18 +49,26 @@
     requestAnimationFrame(animate);
   }
 
-  function startDrawing({offsetX, offsetY}: MouseEvent) {
+  function getEventPoint(e: MouseEvent | TouchEvent) {
+    if (e instanceof MouseEvent) return [e.offsetX, e.offsetY];
+    const touch = e.touches[0];
+    return [touch.clientX, touch.clientY];
+  }
+
+  function startDrawing(e: MouseEvent | TouchEvent) {
     isDrawing = true;
+    const [offsetX, offsetY] = getEventPoint(e);
     [lastX, lastY] = [offsetX, offsetY];
     drawnPoints.push({x: lastX, y: lastY});
 
     createMagicalParticle({x: lastX, y: lastY, size: 3, speedX: 4, speedY: 4, life: 30});
   }
 
-  function draw({offsetX, offsetY}: MouseEvent) {
+  function draw(e: MouseEvent) {
     if (!mainCtx) return;
     if (!isDrawing) return;
 
+    const [offsetX, offsetY] = getEventPoint(e);
     mainCtx.beginPath();
     mainCtx.moveTo(lastX, lastY);
     mainCtx.lineTo(offsetX, offsetY);
@@ -77,6 +85,13 @@
     drawnPoints.push({x: offsetX, y: offsetY});
   }
 
+  function stopDrawing() {
+    isDrawing = false;
+    createDecayStrokeParticles(drawnPoints);
+    castSpell(drawnPoints);
+    drawnPoints = [];
+  }
+
   function animateStroke() {
     if (!mainCanvas || !mainCtx) return;
     if (isDrawing) return;
@@ -90,13 +105,6 @@
     }
 
     mainCtx.putImageData(imageData, 0, 0);
-  }
-
-  function stopDrawing() {
-    isDrawing = false;
-    createDecayStrokeParticles(drawnPoints);
-    castSpell(drawnPoints);
-    drawnPoints = [];
   }
 
   function createDecayStrokeParticles(drawnPoints: Point[]) {
@@ -182,9 +190,11 @@
     <canvas
       id="main-canvas"
       on:mousedown={startDrawing}
+      on:touchstart={startDrawing}
       on:mousemove={draw}
+      on:touchmove={draw}
       on:mouseup={stopDrawing}
-      on:mouseleave={stopDrawing}
+      on:touchend={stopDrawing}
       bind:this={mainCanvas}
       class="absolute inset-0"
     />
@@ -199,6 +209,7 @@
       id="portrait"
       src="mage.webp"
       alt="mage"
+      draggable="false"
       class="shadow-primary rounded-full w-48 h-48 mx-auto border-[3px] border-primary"
     />
     <div id="comment" class="text-xl min-h-16 text-center text-shadow">{comment}</div>
